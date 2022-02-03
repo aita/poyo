@@ -20,10 +20,16 @@ fn sushi_or_poyo() -> PyResult<String> {
     Ok(choices.choose(&mut rng).unwrap().to_string())
 }
 
+#[pyfunction]
+fn call_from_poyo(fun: &PyAny) -> PyResult<&PyAny> {
+    fun.call1(("poyo".to_string(),))
+}
+
 #[pymodule]
 fn poyo(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(poyo_, m)?)?;
     m.add_function(wrap_pyfunction!(sushi, m)?)?;
     m.add_function(wrap_pyfunction!(sushi_or_poyo, m)?)?;
+    m.add_function(wrap_pyfunction!(call_from_poyo, m)?)?;
     Ok(())
 }
